@@ -1,11 +1,11 @@
 package main
 
 import (
-	route "api-solution/Routes"
+	"api-solution/bootstrap"
+
+	"go.uber.org/fx"
 )
 
 func main() {
-	r := route.RouteHandler()
-	r.Run()
-
+	fx.New(bootstrap.Module).Run()
 }
