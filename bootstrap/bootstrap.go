@@ -4,6 +4,7 @@ import (
 	"api-solution/controllers"
 	"api-solution/lib"
 	"api-solution/routers"
+	"api-solution/services"
 	"context"
 	"fmt"
 
@@ -14,6 +15,7 @@ var Module = fx.Options(
 	controllers.Module,
 	routers.Module,
 	lib.Module,
+	services.Module,
 	fx.Invoke(bootstrap),
 )
 
