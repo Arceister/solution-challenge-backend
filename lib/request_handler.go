@@ -7,6 +7,6 @@ type RequestHandler struct {
 }
 
 func NewRequestHandler() RequestHandler {
-	engine := gin.Default()
+	engine := gin.New()
 	return RequestHandler{Gin: engine}
 }
