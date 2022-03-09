@@ -12,15 +12,13 @@ type Database struct {
 }
 
 func NewDatabase(env Env) Database {
-	// DBUsername := env.DbUsername
-	// DBPassword := env.DbPassword
-	// DBHost := env.DbHost
-	// DBPort := env.DbPort
-	// DBName := env.DbName
+	DBUsername := env.DbUsername
+	DBPassword := env.DbPassword
+	DBHost := env.DbHost
+	DBPort := env.DbPort
+	DBName := env.DbName
 
-	url := "root:@tcp(127.0.0.1:3306)/kinder?charset=utf8mb4&parseTime=True&loc=Local"
-
-	// url := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", DBUsername, DBPassword, DBHost, DBPort, DBName)
+	url := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", DBUsername, DBPassword, DBHost, DBPort, DBName)
 
 	db, err := gorm.Open(mysql.Open(url), &gorm.Config{})
 

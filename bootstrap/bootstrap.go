@@ -11,7 +11,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/joho/godotenv"
 	"go.uber.org/fx"
 )
 
@@ -38,7 +37,6 @@ func bootstrap(
 		OnStart: func(c context.Context) error {
 			fmt.Println("Starting Application")
 
-			godotenv.Load()
 			env.LoadEnv()
 
 			go func() {
