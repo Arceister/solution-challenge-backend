@@ -4,6 +4,8 @@ import (
 	"api-solution/models"
 	"api-solution/repository"
 	"fmt"
+
+	"github.com/jinzhu/copier"
 )
 
 type UserService struct {
@@ -24,6 +26,30 @@ func (s UserService) GetAllUser() ([]models.User, error) {
 func (s UserService) GetUserById(userId uint) (models.User, error) {
 	users, err := s.repository.GetUserById(userId)
 	return users, err
+}
+
+func (s UserService) InsertUser(user models.User) error {
+	_, err := s.repository.Save(user)
+	return err
+}
+
+func (s UserService) UpdateUser(id uint, user models.User) error {
+	userNew, err := s.GetUserById(id)
+	if err != nil {
+		return err
+	}
+
+	copier.Copy(&userNew, &user)
+
+	userNew.ID = id
+
+	_, err = s.repository.Update(userNew)
+	return err
+}
+
+func (s UserService) DeleteUser(userId uint) error {
+	_, err := s.repository.Delete(userId)
+	return err
 }
 
 func (s UserService) CreateUser() {

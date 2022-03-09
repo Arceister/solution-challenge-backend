@@ -17,6 +17,9 @@ func (s UserRoutes) Setup() {
 	{
 		api.GET("/user", s.userController.GetUser)
 		api.GET("/user/:id", s.userController.GetUserById)
+		api.POST("/user/register", s.userController.InsertUser)
+		api.PUT("/user/:id", s.userController.UpdateUser)
+		api.DELETE("/user/:id", s.userController.DeleteUser)
 	}
 }
 

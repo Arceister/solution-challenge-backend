@@ -28,5 +28,9 @@ func (r UserRepository) Save(user models.User) (models.User, error) {
 }
 
 func (r UserRepository) Update(user models.User) (models.User, error) {
-	return user, r.db.DB.Updates(&user).Error
+	return user, r.db.DB.Where("id = ?", &user.ID).Updates(&user).Error
+}
+
+func (r UserRepository) Delete(userId uint) (users models.User, err error) {
+	return users, r.db.DB.Where("id = ?", userId).Delete(&users).Error
 }
