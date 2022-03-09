@@ -2,25 +2,35 @@ package controllers
 
 import (
 	"api-solution/services"
+	"fmt"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 type UserController struct {
-	Get func(c *gin.Context)
+	service services.UserService
 }
 
 func NewUserController(userService services.UserService) UserController {
 	return UserController{
-		Get: getUsersController(userService),
+		service: userService,
 	}
 }
 
-func getUsersController(userService services.UserService) func(*gin.Context) {
-	return func(c *gin.Context) {
-		userService.CreateUser()
-		c.JSON(200, gin.H{
-			"message": "user get",
-		})
+func (u UserController) GetUser(c *gin.Context) {
+	users, err := u.service.GetAllUser()
+	if err != nil {
+		fmt.Println(err)
 	}
+	c.JSON(200, gin.H{"data": users})
+}
+
+func (u UserController) GetUserById(c *gin.Context) {
+	idParam, _ := strconv.Atoi(c.Param("id"))
+	users, err := u.service.GetUserById(uint(idParam))
+	if err != nil {
+		fmt.Println(err)
+	}
+	c.JSON(200, gin.H{"data": users})
 }

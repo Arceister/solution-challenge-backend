@@ -4,6 +4,8 @@ import (
 	"api-solution/controllers"
 	"api-solution/lib"
 	"api-solution/middlewares"
+	"api-solution/models"
+	"api-solution/repository"
 	"api-solution/routes"
 	"api-solution/services"
 	"context"
@@ -19,6 +21,8 @@ var Module = fx.Options(
 	lib.Module,
 	services.Module,
 	middlewares.Module,
+	models.Module,
+	repository.Module,
 	fx.Invoke(bootstrap),
 )
 
@@ -27,7 +31,9 @@ func bootstrap(
 	handler lib.RequestHandler,
 	routes routes.Routes,
 	env lib.Env,
-	middlewares middlewares.Middlewares) {
+	middlewares middlewares.Middlewares,
+	migrations models.Migrations,
+) {
 	lifecycle.Append(fx.Hook{
 		OnStart: func(c context.Context) error {
 			fmt.Println("Starting Application")
@@ -36,6 +42,7 @@ func bootstrap(
 			env.LoadEnv()
 
 			go func() {
+				migrations.Migrate()
 				middlewares.Setup()
 				routes.Setup()
 				handler.Gin.Run(env.ServerPort)

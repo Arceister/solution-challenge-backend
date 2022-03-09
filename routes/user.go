@@ -15,7 +15,8 @@ func (s UserRoutes) Setup() {
 	fmt.Println("Setting routes")
 	api := s.handler.Gin.Group("/api")
 	{
-		api.GET("/user", s.userController.Get)
+		api.GET("/user", s.userController.GetUser)
+		api.GET("/user/:id", s.userController.GetUserById)
 	}
 }
 
