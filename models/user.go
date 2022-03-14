@@ -12,3 +12,8 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at"`
 	XPPoints  uint      `gorm:"default:0" json:"xp_points"`
 }
+
+type UserAuthentication struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}

@@ -23,6 +23,10 @@ func (r UserRepository) GetUserById(userId uint) (users models.User, err error) 
 	return users, r.db.DB.Where("id = ?", userId).First(&users).Error
 }
 
+func (r UserRepository) GetEmail(email string) (users models.User, err error) {
+	return users, r.db.DB.Where("email = ?", email).First(&users).Error
+}
+
 func (r UserRepository) Save(user models.User) (models.User, error) {
 	return user, r.db.DB.Create(&user).Error
 }

@@ -29,6 +29,11 @@ func (s UserService) GetUserById(userId uint) (models.User, error) {
 	return users, err
 }
 
+func (s UserService) GetUserByEmail(email string) (models.User, error) {
+	user, err := s.repository.GetEmail(email)
+	return user, err
+}
+
 func (s UserService) InsertUser(user models.User) (models.User, error) {
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
 	user.Password = string(hashedPassword)
