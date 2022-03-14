@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/copier"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
@@ -28,9 +29,11 @@ func (s UserService) GetUserById(userId uint) (models.User, error) {
 	return users, err
 }
 
-func (s UserService) InsertUser(user models.User) error {
-	_, err := s.repository.Save(user)
-	return err
+func (s UserService) InsertUser(user models.User) (models.User, error) {
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+	user.Password = string(hashedPassword)
+	users, err := s.repository.Save(user)
+	return users, err
 }
 
 func (s UserService) UpdateUser(id uint, user models.User) error {

@@ -29,9 +29,3 @@ func (j JWTAuthController) SignIn(c *gin.Context) {
 		"token":   token,
 	})
 }
-
-func (j JWTAuthController) Register(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "register route",
-	})
-}

@@ -11,12 +11,14 @@ import (
 )
 
 type UserController struct {
-	service services.UserService
+	service    services.UserService
+	jwtService services.JWTAuthService
 }
 
-func NewUserController(userService services.UserService) UserController {
+func NewUserController(userService services.UserService, jwtService services.JWTAuthService) UserController {
 	return UserController{
-		service: userService,
+		service:    userService,
+		jwtService: jwtService,
 	}
 }
 
@@ -47,7 +49,10 @@ func (u UserController) InsertUser(c *gin.Context) {
 		return
 	}
 
-	if err := u.service.InsertUser(user); err != nil {
+	users, err := u.service.InsertUser(user)
+	token := u.jwtService.CreateToken(users)
+
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
@@ -55,6 +60,8 @@ func (u UserController) InsertUser(c *gin.Context) {
 	} else {
 		c.JSON(200, gin.H{
 			"message": "Success",
+			"data":    users,
+			"token":   token,
 		})
 	}
 }
