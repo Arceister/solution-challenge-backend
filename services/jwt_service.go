@@ -2,13 +2,21 @@ package services
 
 import (
 	"api-solution/lib"
+	"api-solution/models"
 	"errors"
+	"fmt"
 
 	"github.com/golang-jwt/jwt/v4"
 )
 
 type JWTAuthService struct {
 	env lib.Env
+}
+
+func NewJWTAuthService(env lib.Env) JWTAuthService {
+	return JWTAuthService{
+		env: env,
+	}
 }
 
 func (s JWTAuthService) Authorize(tokenString string) (bool, error) {
@@ -26,4 +34,21 @@ func (s JWTAuthService) Authorize(tokenString string) (bool, error) {
 		}
 	}
 	return false, errors.New("cannot handle token")
+}
+
+func (s JWTAuthService) CreateToken(user models.User) string {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":    user.ID,
+		"name":  user.Name,
+		"email": user.Email,
+		"phone": user.NoHP,
+		"exp":   user.XPPoints,
+	})
+
+	tokenstring, err := token.SignedString([]byte(s.env.JWTSecret))
+
+	if err != nil {
+		fmt.Print("JWT Validation failed: " + err.Error())
+	}
+	return tokenstring
 }
