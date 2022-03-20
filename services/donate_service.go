@@ -15,6 +15,11 @@ func NewDonateService(repository repository.DonateRepository) DonateService {
 	}
 }
 
+func (s DonateService) GetDonateAll() ([]models.Donate, error) {
+	donates, err := s.repository.GetAll()
+	return donates, err
+}
+
 func (s DonateService) GetDonateById(donateId uint) (models.Donate, error) {
 	donate, err := s.repository.GetById(donateId)
 	return donate, err

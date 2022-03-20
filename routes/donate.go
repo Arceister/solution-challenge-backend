@@ -13,6 +13,7 @@ type DonateRoutes struct {
 func (s DonateRoutes) Setup() {
 	donateApi := s.handler.Gin.Group("/api/donate")
 	{
+		donateApi.GET("/", s.donateController.GetAllDonate)
 		donateApi.GET("/:id", s.donateController.GetDonateById)
 		donateApi.POST("/", s.donateController.InsertDonate)
 	}

@@ -27,6 +27,17 @@ func NewDonateController(
 	}
 }
 
+func (d DonateController) GetAllDonate(c *gin.Context) {
+	users, err := d.service.GetDonateAll()
+	if err != nil {
+		c.JSON(500, gin.H{
+			"success": false,
+			"error":   err.Error(),
+		})
+	}
+	c.JSON(200, gin.H{"data": users})
+}
+
 func (d DonateController) GetDonateById(c *gin.Context) {
 	idParam, _ := strconv.Atoi(c.Param("id"))
 	users, err := d.service.GetDonateById(uint(idParam))
