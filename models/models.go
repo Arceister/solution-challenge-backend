@@ -20,5 +20,5 @@ func NewMigrations(db lib.Database) Migrations {
 	}
 }
 func (m Migrations) Migrate() {
-	m.db.DB.AutoMigrate(&User{})
+	m.db.DB.AutoMigrate(&User{}, &Donate{})
 }

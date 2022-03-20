@@ -3,6 +3,7 @@ package controllers
 import (
 	"api-solution/models"
 	"api-solution/services"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -20,6 +21,22 @@ func NewJWTAuthController(
 	return JWTAuthController{
 		service:     service,
 		userService: userService,
+	}
+}
+
+func (j JWTAuthController) AuthorizeToken(c *gin.Context) {
+	header := c.Request.Header.Get("Authorization")
+	header = header[len("Bearer "):]
+	valid, err := j.service.Authorize(header)
+	if err != nil && !valid {
+		c.JSON(http.StatusForbidden, gin.H{
+			"success": false,
+			"message": "JWT Error",
+			"error":   err.Error(),
+		})
+		c.Abort()
+	} else {
+		c.Next()
 	}
 }
 

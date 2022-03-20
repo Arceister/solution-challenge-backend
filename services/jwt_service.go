@@ -13,9 +13,33 @@ type JWTAuthService struct {
 	env lib.Env
 }
 
+type UserToken struct {
+	Email string
+	Exp   uint
+	ID    uint
+	Name  string
+	Phone string
+}
+
 func NewJWTAuthService(env lib.Env) JWTAuthService {
 	return JWTAuthService{
 		env: env,
+	}
+}
+
+func (s JWTAuthService) ExtractClaims(tokenString string) jwt.MapClaims {
+	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
+		return []byte(s.env.JWTSecret), nil
+	})
+
+	if err != nil {
+		return nil
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims
+	} else {
+		return nil
 	}
 }
 

@@ -16,6 +16,7 @@ func (s AuthRoutes) Setup() {
 	authApi := s.handler.Gin.Group("/api/auth")
 	{
 		authApi.POST("/login", s.jwtAuthController.SignIn)
+		authApi.GET("/", s.jwtAuthController.AuthorizeToken)
 	}
 }
 
