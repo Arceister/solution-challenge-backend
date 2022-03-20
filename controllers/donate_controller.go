@@ -88,3 +88,26 @@ func (d DonateController) InsertDonate(c *gin.Context) {
 		"message": "Insert New Donation Success!",
 	})
 }
+
+func (d DonateController) UpdateDonate(c *gin.Context) {
+	donate := models.Donate{}
+	idParam, _ := strconv.Atoi(c.Param("id"))
+
+	if err := c.ShouldBindJSON(&donate); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if err := d.service.UpdateDonate(uint(idParam), donate); err != nil {
+		c.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "Update Success!",
+	})
+}

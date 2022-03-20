@@ -27,3 +27,7 @@ func (r DonateRepository) Save(user models.User, donate models.Donate) error {
 	r.db.DB.Model(&donate).Association("User").Append(&user)
 	return r.db.DB.Omit("User.*").Create(&donate).Error
 }
+
+func (r DonateRepository) Update(donate models.Donate) (models.Donate, error) {
+	return donate, r.db.DB.Preload("User").Where("id = ?", donate.ID).Updates(&donate).Error
+}
