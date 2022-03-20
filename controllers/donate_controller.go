@@ -4,6 +4,7 @@ import (
 	"api-solution/models"
 	"api-solution/services"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,6 +25,18 @@ func NewDonateController(
 		jwtService:  jwtService,
 		userService: userService,
 	}
+}
+
+func (d DonateController) GetDonateById(c *gin.Context) {
+	idParam, _ := strconv.Atoi(c.Param("id"))
+	users, err := d.service.GetDonateById(uint(idParam))
+	if err != nil {
+		c.JSON(500, gin.H{
+			"success": false,
+			"error":   err.Error(),
+		})
+	}
+	c.JSON(200, gin.H{"data": users})
 }
 
 func (d DonateController) InsertDonate(c *gin.Context) {
