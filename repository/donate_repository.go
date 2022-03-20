@@ -19,6 +19,7 @@ func (r DonateRepository) GetAll() (donates []models.Donate, err error) {
 	return donates, r.db.DB.Order("created_at DESC").Find(&donates).Error
 }
 
-func (r DonateRepository) Save(donate models.Donate) (models.Donate, error) {
-	return donate, r.db.DB.Create(&donate).Error
+func (r DonateRepository) Save(user models.User, donate models.Donate) error {
+	r.db.DB.Model(&donate).Association("User").Append([]models.User{user})
+	return r.db.DB.Preload("User").Create(&donate).Error
 }

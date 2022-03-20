@@ -4,7 +4,7 @@ import "time"
 
 type Donate struct {
 	ID          uint      `gorm:"primaryKey;autoIncrement" json:"id"`
-	Users       []User    `gorm:"many2many:users_donate;"`
+	User        []User    `gorm:"many2many:users_donate;"`
 	Judul       string    `gorm:"notNull" json:"judul"`
 	Deskripsi   string    `gorm:"notNull" json:"deskripsi"`
 	JenisProduk string    `json:"jenisProduk"`

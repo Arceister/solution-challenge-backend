@@ -28,11 +28,11 @@ func (r UserRepository) GetEmail(email string) (users models.User, err error) {
 }
 
 func (r UserRepository) Save(user models.User) (models.User, error) {
-	return user, r.db.DB.Preload("Donasi").Create(&user).Error
+	return user, r.db.DB.Preload("Donate").Create(&user).Error
 }
 
 func (r UserRepository) Update(user models.User) (models.User, error) {
-	return user, r.db.DB.Preload("Donasi").Where("id = ?", &user.ID).Updates(&user).Error
+	return user, r.db.DB.Preload("Donate").Where("id = ?", &user.ID).Updates(&user).Error
 }
 
 func (r UserRepository) Delete(userId uint) (users models.User, err error) {
