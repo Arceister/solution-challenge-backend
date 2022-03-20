@@ -9,6 +9,6 @@ type DonateRoutes struct {
 func (s DonateRoutes) Setup() {
 	donateApi := s.handler.Gin.Group("/api/donate")
 	{
-		donateApi.GET("/")
+		donateApi.POST("/")
 	}
 }

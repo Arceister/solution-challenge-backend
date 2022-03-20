@@ -11,6 +11,7 @@ type User struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 	XPPoints  uint      `gorm:"default:0" json:"xp_points"`
+	Donate    []Donate  `gorm:"many2many:users_donate;"`
 }
 
 type UserAuthentication struct {
