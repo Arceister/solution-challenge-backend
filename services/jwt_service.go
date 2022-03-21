@@ -67,6 +67,8 @@ func (s JWTAuthService) CreateToken(user models.User) string {
 		"email": user.Email,
 		"phone": user.NoHP,
 		"exp":   user.XPPoints,
+		"lat":   user.Latitude,
+		"lng":   user.Longitude,
 	})
 
 	tokenstring, err := token.SignedString([]byte(s.env.JWTSecret))

@@ -16,6 +16,7 @@ func (s EntryRoutes) Setup() {
 	entry := s.handler.Gin.Group("/")
 	{
 		entry.GET("/", s.entryController.Get)
+		entry.POST("/")
 	}
 }
 
