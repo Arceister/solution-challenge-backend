@@ -6,6 +6,7 @@ type Donate struct {
 	ID          uint      `gorm:"primaryKey;autoIncrement" json:"id"`
 	User        []User    `gorm:"many2many:users_donate;"`
 	Judul       string    `gorm:"notNull" json:"judul"`
+	Gambar      string    `json:"gambar"`
 	Deskripsi   string    `gorm:"notNull" json:"deskripsi"`
 	JenisProduk string    `json:"jenisProduk"`
 	Kuantitas   uint      `gorm:"notNull" json:"kuantitas"`
