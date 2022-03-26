@@ -40,7 +40,7 @@ func bootstrap(
 			env.LoadEnv()
 
 			go func() {
-				// migrations.Migrate()
+				migrations.Migrate()
 				middlewares.Setup()
 				routes.Setup()
 				handler.Gin.Run()
