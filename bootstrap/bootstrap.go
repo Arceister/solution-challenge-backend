@@ -43,7 +43,7 @@ func bootstrap(
 				// migrations.Migrate()
 				middlewares.Setup()
 				routes.Setup()
-				handler.Gin.Run(env.ServerPort)
+				handler.Gin.Run()
 			}()
 			return nil
 		},
