@@ -11,6 +11,7 @@ type Donate struct {
 	JenisProduk string    `json:"jenisProduk"`
 	Kuantitas   uint      `gorm:"notNull" json:"kuantitas"`
 	Aktivitas   bool      `gorm:"notNull" json:"aktivitas"`
+	Distribusi  bool      `json:"distribusi"`
 	CreatedAt   time.Time `json:"createdAt"`
 	Latitude    float64   `gorm:"type:decimal(10,8);default:0" json:"lat"`
 	Longitude   float64   `gorm:"type:decimal(11,8);default:0" json:"lng"`
