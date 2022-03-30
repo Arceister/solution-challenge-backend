@@ -45,3 +45,13 @@ func (s DonateService) UpdateDonate(donateId uint, donate models.Donate) error {
 	_, err = s.repository.Update(donateNew)
 	return err
 }
+
+func (s DonateService) DeleteDonate(donateId uint) error {
+	donateNew, err := s.GetDonateById(donateId)
+	if err != nil {
+		return err
+	}
+
+	deleteErr := s.repository.Delete(donateId, donateNew)
+	return deleteErr
+}

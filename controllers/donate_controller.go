@@ -111,3 +111,18 @@ func (d DonateController) UpdateDonate(c *gin.Context) {
 		"message": "Update Success!",
 	})
 }
+
+func (d DonateController) DeleteDonate(c *gin.Context) {
+	idParam, _ := strconv.Atoi(c.Param("id"))
+
+	if err := d.service.DeleteDonate(uint(idParam)); err != nil {
+		c.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "Delete Donation!",
+	})
+}
