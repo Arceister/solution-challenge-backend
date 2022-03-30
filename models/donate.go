@@ -10,7 +10,7 @@ type Donate struct {
 	Deskripsi   string    `gorm:"notNull" json:"deskripsi"`
 	JenisProduk string    `json:"jenisProduk"`
 	Kuantitas   uint      `gorm:"notNull" json:"kuantitas"`
-	Aktivitas   bool      `gorm:"notNull" json:"aktivitas"`
+	Aktivitas   bool      `gorm:"notNull" json:"aktivitas"` //True:
 	Distribusi  bool      `json:"distribusi"`
 	CreatedAt   time.Time `json:"createdAt"`
 	Latitude    float64   `gorm:"type:decimal(10,8);default:0" json:"lat"`

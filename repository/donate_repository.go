@@ -25,6 +25,7 @@ func (r DonateRepository) GetById(donateId uint) (donate models.Donate, err erro
 
 func (r DonateRepository) Save(user models.User, donate models.Donate) error {
 	r.db.DB.Model(&donate).Association("User").Append(&user)
+	r.db.DB.Model(&user).Update("xp_points", +100)
 	return r.db.DB.Omit("User.*").Create(&donate).Error
 }
 
