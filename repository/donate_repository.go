@@ -35,5 +35,5 @@ func (r DonateRepository) Update(donate models.Donate) (models.Donate, error) {
 
 func (r DonateRepository) Delete(donateId uint, donate models.Donate) error {
 	r.db.DB.Model(&donate).Association("User").Delete(&donate)
-	return r.db.DB.Omit("User.*").Delete(&donate).Error
+	return r.db.DB.Select("User").Delete(&donate).Error
 }
