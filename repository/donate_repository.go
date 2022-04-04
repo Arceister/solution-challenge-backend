@@ -33,7 +33,7 @@ func (r DonateRepository) TakeDonate(user models.User, donate models.Donate) err
 
 func (r DonateRepository) Save(user models.User, donate models.Donate) error {
 	r.db.DB.Model(&donate).Association("User").Append(&user)
-	r.db.DB.Model(&user).Update("xp_points", +100)
+	r.db.DB.Model(&user).Update("xp_points", gorm.Expr("xp_points + ?", 100))
 	return r.db.DB.Omit("User.*").Create(&donate).Error
 }
 
