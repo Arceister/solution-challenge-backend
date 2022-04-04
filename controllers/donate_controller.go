@@ -89,6 +89,46 @@ func (d DonateController) InsertDonate(c *gin.Context) {
 	})
 }
 
+func (d DonateController) TakeDonation(c *gin.Context) {
+	header := c.Request.Header.Get("Authorization")
+	header = header[len("Bearer "):]
+
+	idParam, _ := strconv.Atoi(c.Param("id"))
+	donate, err := d.service.GetDonateById(uint(idParam))
+	if err != nil {
+		c.JSON(500, gin.H{
+			"success": false,
+			"error":   err.Error(),
+		})
+	}
+
+	valid, err := d.jwtService.Authorize(header)
+	if err != nil && !valid {
+		c.JSON(http.StatusForbidden, gin.H{
+			"success": false,
+			"message": "JWT Error",
+			"error":   err.Error(),
+		})
+		c.Abort()
+	}
+
+	claims := d.jwtService.ExtractClaims(header)
+	userId := claims["id"].(float64)
+
+	user, _ := d.userService.GetUserById(uint(userId))
+
+	if err := d.service.TakeDonation(user, donate); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "Donation Taken!",
+	})
+}
+
 func (d DonateController) UpdateDonate(c *gin.Context) {
 	donate := models.Donate{}
 	idParam, _ := strconv.Atoi(c.Param("id"))

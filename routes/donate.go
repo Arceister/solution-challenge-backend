@@ -16,6 +16,7 @@ func (s DonateRoutes) Setup() {
 		donateApi.GET("/", s.donateController.GetAllDonate)
 		donateApi.GET("/:id", s.donateController.GetDonateById)
 		donateApi.POST("/", s.donateController.InsertDonate)
+		donateApi.POST("/take/:id", s.donateController.TakeDonation)
 		donateApi.PUT("/:id", s.donateController.UpdateDonate)
 		donateApi.DELETE("/:id", s.donateController.DeleteDonate)
 	}

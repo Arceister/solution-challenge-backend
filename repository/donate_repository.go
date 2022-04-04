@@ -3,6 +3,8 @@ package repository
 import (
 	"api-solution/lib"
 	"api-solution/models"
+
+	"gorm.io/gorm"
 )
 
 type DonateRepository struct {
@@ -21,6 +23,12 @@ func (r DonateRepository) GetAll() (donates []models.Donate, err error) {
 
 func (r DonateRepository) GetById(donateId uint) (donate models.Donate, err error) {
 	return donate, r.db.DB.Where("id = ?", donateId).First(&donate).Error
+}
+
+func (r DonateRepository) TakeDonate(user models.User, donate models.Donate) error {
+	r.db.DB.Model(&donate).Association("User")
+	r.db.DB.Model(&user).Update("xp_points_pencari", gorm.Expr("xp_points_pencari + ?", 50))
+	return r.db.DB.Model(&donate).Update("kuantitas", gorm.Expr("kuantitas - ?", 1)).Error
 }
 
 func (r DonateRepository) Save(user models.User, donate models.Donate) error {
