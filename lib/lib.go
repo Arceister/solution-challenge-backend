@@ -6,4 +6,5 @@ var Module = fx.Options(
 	fx.Provide(NewRequestHandler),
 	fx.Provide(NewEnv),
 	fx.Provide(NewDatabase),
+	fx.Provide(NewMongoDatabase),
 )

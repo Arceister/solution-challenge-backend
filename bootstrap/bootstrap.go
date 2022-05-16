@@ -32,6 +32,7 @@ func bootstrap(
 	env lib.Env,
 	middlewares middlewares.Middlewares,
 	migrations models.Migrations,
+	mongo models.MongoCall,
 ) {
 	lifecycle.Append(fx.Hook{
 		OnStart: func(c context.Context) error {
@@ -41,6 +42,7 @@ func bootstrap(
 
 			go func() {
 				migrations.Migrate()
+				mongo.Mongo()
 				middlewares.Setup()
 				routes.Setup()
 				handler.Gin.Run()

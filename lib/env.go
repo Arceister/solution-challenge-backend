@@ -14,6 +14,7 @@ type Env struct {
 	DbName     string
 	DbHost     string
 	JWTSecret  string
+	MongoURI   string
 }
 
 func NewEnv() Env {
@@ -33,4 +34,6 @@ func (env *Env) LoadEnv() {
 	env.DbHost = os.Getenv("DB_HOST")
 
 	env.JWTSecret = os.Getenv("JWT")
+
+	env.MongoURI = os.Getenv("MONGO")
 }
