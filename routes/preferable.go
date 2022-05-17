@@ -24,5 +24,6 @@ func (s PreferableRoutes) Setup() {
 	api := s.handler.Gin.Group("/api/prefer")
 	{
 		api.GET("/all", s.preferableController.GetAllPreferables)
+		api.POST("/", s.preferableController.InsertPreferable)
 	}
 }

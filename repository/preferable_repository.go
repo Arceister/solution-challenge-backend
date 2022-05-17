@@ -43,3 +43,14 @@ func (r PreferableRepository) GetAll() (preferables []models.UserPreferable, err
 	preferables = listPreferables
 	return preferables, err
 }
+
+func (r PreferableRepository) InsertOne(insertable models.UserPreferable) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	_, err := r.mongo.Mongo.Collection("preferables").InsertOne(ctx, insertable)
+	if err != nil {
+		fmt.Println("error", err)
+		return err
+	}
+	return nil
+}
