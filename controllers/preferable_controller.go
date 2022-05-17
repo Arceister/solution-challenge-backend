@@ -62,8 +62,9 @@ func (p PreferableController) InsertPreferable(c *gin.Context) {
 	userId := claims["id"].(float64)
 
 	userPreferable := models.UserPreferable{
-		User_ID:    uint(userId),
-		Preferable: jsonPreferable.Preferable,
+		User_ID:     uint(userId),
+		Preferable:  jsonPreferable.Preferable,
+		Prohibition: jsonPreferable.Prohibition,
 	}
 
 	queryErr := p.service.InsertPreferables(userPreferable)
