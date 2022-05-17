@@ -7,4 +7,5 @@ var Module = fx.Options(
 	fx.Provide(NewEntryController),
 	fx.Provide(NewJWTAuthController),
 	fx.Provide(NewDonateController),
+	fx.Provide(NewPreferableController),
 )
