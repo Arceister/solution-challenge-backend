@@ -124,8 +124,17 @@ func (d DonateController) TakeDonation(c *gin.Context) {
 		return
 	}
 
+	userDonation, err := d.service.GetUserByDonateId(uint(idParam))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	c.JSON(200, gin.H{
 		"message": "Donation Taken!",
+		"user_id": userDonation,
 	})
 }
 

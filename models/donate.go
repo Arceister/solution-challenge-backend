@@ -16,3 +16,8 @@ type Donate struct {
 	Latitude    float64   `gorm:"type:decimal(10,8);default:0" json:"lat"`
 	Longitude   float64   `gorm:"type:decimal(11,8);default:0" json:"lng"`
 }
+
+type UsersDonates struct {
+	User_ID   uint
+	Donate_ID uint
+}

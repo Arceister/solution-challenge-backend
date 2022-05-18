@@ -60,3 +60,8 @@ func (s DonateService) DeleteDonate(donateId uint) error {
 	deleteErr := s.repository.Delete(donateId, donateNew)
 	return deleteErr
 }
+
+func (s DonateService) GetUserByDonateId(donateId uint) (uint, error) {
+	userDonationId, err := s.repository.GetUserDonationBased(donateId)
+	return userDonationId, err
+}

@@ -45,3 +45,7 @@ func (r DonateRepository) Delete(donateId uint, donate models.Donate) error {
 	r.db.DB.Model(&donate).Association("User").Delete(&donate)
 	return r.db.DB.Select("User").Delete(&donate).Error
 }
+
+func (r DonateRepository) GetUserDonationBased(donationId uint) (userDonate uint, err error) {
+	return userDonate, r.db.DB.Raw("SELECT user_id FROM users_donate WHERE donate_id = ?", donationId).Scan(&userDonate).Error
+}
