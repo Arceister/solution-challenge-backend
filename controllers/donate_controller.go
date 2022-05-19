@@ -115,15 +115,6 @@ func (d DonateController) TakeDonation(c *gin.Context) {
 	claims := d.jwtService.ExtractClaims(header)
 	userId := claims["id"].(float64)
 
-	user, _ := d.userService.GetUserById(uint(userId))
-
-	if err := d.service.TakeDonation(user, donate); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
 	userDonation, err := d.service.GetUserByDonateId(uint(idParam))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -132,9 +123,18 @@ func (d DonateController) TakeDonation(c *gin.Context) {
 		return
 	}
 
+	user, _ := d.userService.GetUserById(uint(userId))
+	donatur, _ := d.userService.GetUserById(uint(userDonation))
+
+	if err := d.service.TakeDonation(user, donate, donatur); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	c.JSON(200, gin.H{
 		"message": "Donation Taken!",
-		"user_id": userDonation,
 	})
 }
 

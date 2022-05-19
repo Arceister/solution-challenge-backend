@@ -25,9 +25,10 @@ func (r DonateRepository) GetById(donateId uint) (donate models.Donate, err erro
 	return donate, r.db.DB.Where("id = ?", donateId).First(&donate).Error
 }
 
-func (r DonateRepository) TakeDonate(user models.User, donate models.Donate) error {
+func (r DonateRepository) TakeDonate(user models.User, donate models.Donate, donatur models.User) error {
 	r.db.DB.Model(&donate).Association("User")
 	r.db.DB.Model(&user).Update("xp_points_pencari", gorm.Expr("xp_points_pencari + ?", 50))
+	r.db.DB.Model(&donatur).Update("xp_points", gorm.Expr("xp_points + ?", 50))
 	return r.db.DB.Model(&donate).Update("kuantitas", gorm.Expr("kuantitas - ?", 1)).Error
 }
 
