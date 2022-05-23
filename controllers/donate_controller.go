@@ -94,6 +94,9 @@ func (d DonateController) TakeDonation(c *gin.Context) {
 	header = header[len("Bearer "):]
 
 	idParam, _ := strconv.Atoi(c.Param("id"))
+	quantityQuery := c.DefaultQuery("quantity", "1")
+	quantityParam, _ := strconv.ParseUint(quantityQuery, 10, 64)
+
 	donate, err := d.service.GetDonateById(uint(idParam))
 	if err != nil {
 		c.JSON(500, gin.H{
@@ -126,7 +129,7 @@ func (d DonateController) TakeDonation(c *gin.Context) {
 	user, _ := d.userService.GetUserById(uint(userId))
 	donatur, _ := d.userService.GetUserById(uint(userDonation))
 
-	donateNew, err := d.service.TakeDonation(user, donate, donatur)
+	donateNew, err := d.service.TakeDonation(uint(quantityParam), user, donate, donatur)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),

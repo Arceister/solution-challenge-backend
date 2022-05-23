@@ -26,14 +26,15 @@ func (r DonateRepository) GetById(donateId uint) (donate models.Donate, err erro
 }
 
 func (r DonateRepository) TakeDonate(
+	quantity uint,
 	user models.User,
 	donate models.Donate,
 	donatur models.User,
 ) (uint, error) {
 	r.db.DB.Model(&donate).Association("User")
-	r.db.DB.Model(&user).Update("xp_points_pencari", gorm.Expr("xp_points_pencari + ?", 50))
-	r.db.DB.Model(&donatur).Update("xp_points", gorm.Expr("xp_points + ?", 50))
-	return donate.Kuantitas - 1, r.db.DB.Model(&donate).Update("kuantitas", gorm.Expr("kuantitas - ?", 1)).Error
+	r.db.DB.Model(&user).Update("xp_points_pencari", gorm.Expr("xp_points_pencari + ?", 50*quantity))
+	r.db.DB.Model(&donatur).Update("xp_points", gorm.Expr("xp_points + ?", 50*quantity))
+	return donate.Kuantitas - (1 * quantity), r.db.DB.Model(&donate).Update("kuantitas", gorm.Expr("kuantitas - ?", quantity)).Error
 }
 
 func (r DonateRepository) Save(user models.User, donate models.Donate) error {

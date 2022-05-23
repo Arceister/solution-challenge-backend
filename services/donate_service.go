@@ -33,10 +33,11 @@ func (s DonateService) InsertDonate(user models.User, donate models.Donate) erro
 }
 
 func (s DonateService) TakeDonation(
+	quantity uint,
 	user models.User,
 	donate models.Donate,
 	donatur models.User) (uint, error) {
-	quantity, err := s.repository.TakeDonate(user, donate, donatur)
+	quantity, err := s.repository.TakeDonate(quantity, user, donate, donatur)
 	return quantity, err
 }
 
