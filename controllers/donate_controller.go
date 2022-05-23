@@ -126,15 +126,27 @@ func (d DonateController) TakeDonation(c *gin.Context) {
 	user, _ := d.userService.GetUserById(uint(userId))
 	donatur, _ := d.userService.GetUserById(uint(userDonation))
 
-	if err := d.service.TakeDonation(user, donate, donatur); err != nil {
+	donateNew, err := d.service.TakeDonation(user, donate, donatur)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 
+	if donateNew == 0 {
+		deleteDonateError := d.service.DeleteDonate(donate.ID)
+		if deleteDonateError != nil {
+			c.JSON(500, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+	}
+
 	c.JSON(200, gin.H{
 		"message": "Donation Taken!",
+		"data":    donateNew,
 	})
 }
 
