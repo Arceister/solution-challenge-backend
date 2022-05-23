@@ -60,7 +60,7 @@ func (s DonateService) DeleteDonate(donateId uint) error {
 		return err
 	}
 
-	deleteErr := s.repository.Delete(donateId, donateNew)
+	deleteErr := s.repository.Delete(donateNew)
 	return deleteErr
 }
 
