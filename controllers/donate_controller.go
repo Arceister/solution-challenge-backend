@@ -27,25 +27,49 @@ func NewDonateController(
 	}
 }
 
+func successResponse(
+	c *gin.Context,
+	code int,
+	message string,
+	data interface{},
+) (int, interface{}) {
+	response := gin.H{
+		"success": true,
+		"message": message,
+		"data":    data,
+	}
+	return code, response
+}
+
+func failedResponse(
+	c *gin.Context,
+	code int,
+	message string,
+	err error,
+	data interface{},
+) (int, interface{}) {
+	response := gin.H{
+		"success": false,
+		"message": message,
+		"error":   err.Error(),
+		"data":    data,
+	}
+	return code, response
+}
+
 func (d DonateController) GetAllDonate(c *gin.Context) {
 	users, err := d.service.GetDonateAll()
 	if err != nil {
-		c.JSON(500, gin.H{
-			"success": false,
-			"error":   err.Error(),
-		})
+		c.JSON(failedResponse(c, 500, "Error occured.", err, nil))
 	}
-	c.JSON(200, gin.H{"data": users})
+	c.JSON(successResponse(c, 200, "Get all donate success!", users))
 }
 
 func (d DonateController) GetDonateById(c *gin.Context) {
 	idParam, _ := strconv.Atoi(c.Param("id"))
 	users, err := d.service.GetDonateById(uint(idParam))
 	if err != nil {
-		c.JSON(500, gin.H{
-			"success": false,
-			"error":   err.Error(),
-		})
+		c.JSON(failedResponse(c, 500, "Error occured.", err, nil))
 	}
 	c.JSON(200, gin.H{"data": users})
 }
@@ -56,19 +80,13 @@ func (d DonateController) InsertDonate(c *gin.Context) {
 	header = header[len("Bearer "):]
 
 	if err := c.ShouldBindJSON(&donate); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(failedResponse(c, 500, "Error occured.", err, nil))
 		return
 	}
 
 	valid, err := d.jwtService.Authorize(header)
 	if err != nil && !valid {
-		c.JSON(http.StatusForbidden, gin.H{
-			"success": false,
-			"message": "JWT Error",
-			"error":   err.Error(),
-		})
+		c.JSON(failedResponse(c, 403, "JWT Error.", err, nil))
 		c.Abort()
 	}
 
@@ -78,9 +96,7 @@ func (d DonateController) InsertDonate(c *gin.Context) {
 	user, _ := d.userService.GetUserById(uint(userId))
 
 	if err := d.service.InsertDonate(user, donate); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(failedResponse(c, 500, "Error occured.", err, nil))
 		return
 	}
 
@@ -99,10 +115,7 @@ func (d DonateController) TakeDonation(c *gin.Context) {
 
 	donate, err := d.service.GetDonateById(uint(idParam))
 	if err != nil {
-		c.JSON(500, gin.H{
-			"success": false,
-			"error":   err.Error(),
-		})
+		c.JSON(failedResponse(c, 500, "Error occured.", err, nil))
 	}
 
 	valid, err := d.jwtService.Authorize(header)
@@ -120,9 +133,7 @@ func (d DonateController) TakeDonation(c *gin.Context) {
 
 	userDonation, err := d.service.GetUserByDonateId(uint(idParam))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(failedResponse(c, 500, "Error occured.", err, nil))
 		return
 	}
 
@@ -131,26 +142,19 @@ func (d DonateController) TakeDonation(c *gin.Context) {
 
 	donateNew, err := d.service.TakeDonation(uint(quantityParam), user, donate, donatur)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(failedResponse(c, 500, "Error occured.", err, nil))
 		return
 	}
 
 	if donateNew == 0 {
 		deleteDonateError := d.service.DeleteDonate(donate.ID)
 		if deleteDonateError != nil {
-			c.JSON(500, gin.H{
-				"error": err.Error(),
-			})
+			c.JSON(failedResponse(c, 500, "Error occured.", err, nil))
 			return
 		}
 	}
 
-	c.JSON(200, gin.H{
-		"message": "Donation Taken!",
-		"data":    donateNew,
-	})
+	c.JSON(successResponse(c, 200, "Donation taken!", nil))
 }
 
 func (d DonateController) UpdateDonate(c *gin.Context) {
@@ -158,9 +162,7 @@ func (d DonateController) UpdateDonate(c *gin.Context) {
 	idParam, _ := strconv.Atoi(c.Param("id"))
 
 	if err := c.ShouldBindJSON(&donate); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(failedResponse(c, 500, "Error occured.", err, nil))
 		return
 	}
 
@@ -171,18 +173,14 @@ func (d DonateController) UpdateDonate(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{
-		"message": "Update Success!",
-	})
+	c.JSON(successResponse(c, 200, "Update success!", nil))
 }
 
 func (d DonateController) DeleteDonate(c *gin.Context) {
 	idParam, _ := strconv.Atoi(c.Param("id"))
 
 	if err := d.service.DeleteDonate(uint(idParam)); err != nil {
-		c.JSON(500, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(failedResponse(c, 500, "Error occured.", err, nil))
 		return
 	}
 
